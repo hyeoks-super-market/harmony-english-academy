@@ -1,13 +1,18 @@
 package com.teamhyeok.harmonyenglishacademy.api.controller;
 
 import com.teamhyeok.harmonyenglishacademy.api.request.EnglishTranscriptCreate;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/v1/english-transcript")
@@ -15,25 +20,25 @@ import java.util.Map;
 public class EnglishTranscriptController {
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> register(@RequestBody EnglishTranscriptCreate request) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid EnglishTranscriptCreate request, BindingResult result) {
         // TODO 1. 게시글 등록 실패시 400 Bad Request 반환
         final URI REDIRECT_TO_MAIN_PAGE_URL = URI.create("/api/v1/english-transcripts");
 
+        // TODO 2. Title validation check (type2)
+        /* EnglishTranscriptCreate에 valid 애노테이션 적용하는 방법 */
 
-        // TODO 1. Title validation check (type1)
+        if (result.hasErrors()) {
+            List<FieldError> fieldErrors = result.getFieldErrors();
+            FieldError firstFieldError = fieldErrors.get(0);
+            String fieldName = firstFieldError.getField();
+            String errorMessage = firstFieldError.getDefaultMessage();
 
-        if (request.getTitle() == null || request.getTitle().isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            Map<String, String> error = new HashMap<>();
+            error.put("field", fieldName);
+            error.put("errorMessage", errorMessage);
+
+            return ResponseEntity.badRequest().body(error);
         }
-
-        if (request.getContent() == null | request.getContent().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (request.getTitle().length() < 2 || request.getTitle().length() > 100) {
-            return ResponseEntity.badRequest().build();
-        } // .. 등등 직접 컨트롤러 안에서 유효성 검증 처리 구현, 벌써 복잡해진다.
-
 
         return ResponseEntity.created(REDIRECT_TO_MAIN_PAGE_URL).build();
     }
