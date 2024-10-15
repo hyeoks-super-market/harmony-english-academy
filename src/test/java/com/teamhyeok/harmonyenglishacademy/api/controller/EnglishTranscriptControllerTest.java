@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -29,7 +29,7 @@ class EnglishTranscriptControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/english-transcripts"))
-                .andDo(MockMvcResultHandlers.print());
+                .andDo(print());
 
     }
 
@@ -44,9 +44,10 @@ class EnglishTranscriptControllerTest {
                         .content("{\"title\": \"\", \"content\": \"the series ...@#!#\"}")
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.field").value("title"))
-                .andExpect(jsonPath("$.errorMessage").value("영어 스크립트 게시글 등록을 위해선 이름이 필요합니다."))
-                .andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요."))
+                .andDo(print());
 
     }
 
