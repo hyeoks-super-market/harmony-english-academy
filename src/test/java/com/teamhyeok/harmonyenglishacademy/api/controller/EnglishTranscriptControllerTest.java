@@ -78,5 +78,36 @@ class EnglishTranscriptControllerTest {
 
     }
 
+    @DisplayName("/api/v1/english-transcript에 POST 요청 이후 해당 게시글이 DB를 통해 정상적으로 조회된다.")
+    @Test
+    void register_save_transcript() throws Exception {
+
+        // given
+        String uuidTitle = "Glee season1 (ep1) - " + UUID.randomUUID();
+        EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
+                .title(uuidTitle)
+                .content("the series ...@#!#")
+                .build();
+
+        String stringRequest = objectMapper.writeValueAsString(request);
+
+
+        // when
+        mockMvc.perform(post("/api/v1/english-transcript")
+                        .contentType(APPLICATION_JSON)
+                        .content(stringRequest)
+                )
+                .andExpect(status().isCreated())
+                .andDo(print());
+
+        // then - 등록된 게시글 제목으로 조회
+        mockMvc.perform(get("/api/v1/english-transcript/search")
+                        .param("title", uuidTitle)
+                        .param("page", "1")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value(uuidTitle))
+                .andDo(print());
+    }
 
 }
