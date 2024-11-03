@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
-@Entity @Getter @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Entity @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnglishTranscript {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
