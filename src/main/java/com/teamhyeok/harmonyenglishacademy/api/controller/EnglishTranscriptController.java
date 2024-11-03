@@ -27,6 +27,15 @@ public class EnglishTranscriptController {
         return ResponseEntity.created(REDIRECT_TO_MAIN_PAGE_URL).build();
     }
 
+    @GetMapping
+    public ResponseEntity<List<EnglishTranscript>> getEnglishTranscript(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<EnglishTranscript> transcript = englishTranscriptService.getEnglishTranscript(page, size);
+        return ResponseEntity.ok(transcript);
+
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<EnglishTranscript>> searchTranscriptByTitle(

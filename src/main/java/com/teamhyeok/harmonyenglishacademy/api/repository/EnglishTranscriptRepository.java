@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EnglishTranscriptRepository extends JpaRepository<EnglishTranscript, Long>{
 
+    Page<EnglishTranscript> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<EnglishTranscript> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
 }
