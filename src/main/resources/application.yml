@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/hyeokDB
+    username: root
+    password: 1541
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 8087
+logging:
+  level:
+    org.springframework.cache: trace
+
