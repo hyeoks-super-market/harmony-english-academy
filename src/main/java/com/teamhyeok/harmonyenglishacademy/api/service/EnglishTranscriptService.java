@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Cacheable
 @RequiredArgsConstructor @Service
 public class EnglishTranscriptService {
     private final EnglishTranscriptRepository englishTranscriptRepository;
