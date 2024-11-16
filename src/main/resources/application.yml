@@ -2,13 +2,19 @@ spring:
   profiles:
     default: local
   datasource:
-    url: jdbc:mysql://localhost:3306/hyeokDB
+    url: jdbc:mysql://localhost:3306/harmony_english_academy
     username: root
     password: 1541
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
+  sql:
+    init:
+      mode: always
+      platform: mysql
   data:
     redis:
       host: localhost
@@ -17,5 +23,7 @@ server:
   port: 8087
 logging:
   level:
-    org.springframework.cache: trace
-
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.cache: TRACE
+    org.springframework.boot.autoconfigure.jdbc.DataSourceInitializer: DEBUG
+    org.springframework.sql: DEBUG
