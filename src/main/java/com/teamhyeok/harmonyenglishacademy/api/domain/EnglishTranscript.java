@@ -11,12 +11,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-
-@EntityListeners(AuditingEntityListener.class)
-@Entity @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnglishTranscript {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +25,8 @@ public class EnglishTranscript {
     @Lob
     private String content;
 
+    private String youtubeUrl;
+
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -34,8 +34,9 @@ public class EnglishTranscript {
     private LocalDateTime createdAt;
 
     @Builder
-    public EnglishTranscript(String title, String content) {
+    public EnglishTranscript(String title, String content, String youtubeUrl) {
         this.title = title;
         this.content = content;
+        this.youtubeUrl = youtubeUrl;
     }
 }
