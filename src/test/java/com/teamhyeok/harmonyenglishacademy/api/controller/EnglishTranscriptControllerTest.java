@@ -35,9 +35,10 @@ class EnglishTranscriptControllerTest {
     void register() throws Exception{
         // given
         EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
-                                            .title("The Glee, season2 ep.3")
-                                            .content("the series ...@#!#")
-                                            .build();
+                .title("The Glee, season2 ep.3")
+                .content("the series ...@#!#")
+                .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+                .build();
 
         String stringRequest = objectMapper.writeValueAsString(request);
 
@@ -52,7 +53,6 @@ class EnglishTranscriptControllerTest {
 
     }
 
-
     @DisplayName("게시글 등록 요청시 제목은 필수로 기입되어야 한다.")
     @Test
     void register_title_is_required() throws Exception {
@@ -61,6 +61,7 @@ class EnglishTranscriptControllerTest {
         EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
                 .title("")
                 .content("the series ...@#!#")
+                .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
                 .build();
 
         String stringRequest = objectMapper.writeValueAsString(request);
@@ -73,10 +74,63 @@ class EnglishTranscriptControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-                .andExpect(jsonPath("$.validation.title").value("영어 스크립트 게시글 등록을 위해선 이름이 필요합니다."))
+                .andExpect(jsonPath("$.validation.title").value("영어 스크립트 게시글 등록을 위해선 제목이 필요합니다."))
                 .andDo(print());
 
     }
+
+    @DisplayName("게시글 등록 요청시 YouTube URL은 필수로 기입되어야 한다.")
+    @Test
+    void register_youtubeUrl_is_required() throws Exception {
+
+        // given
+        EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
+                .title("The Glee, season2 ep.3")
+                .content("the series ...@#!#")
+                .youtubeUrl("")  // 빈 문자열로 설정하여 필수 입력 검증 테스트
+                .build();
+
+        String stringRequest = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/api/v1/english-transcript")
+                        .contentType(APPLICATION_JSON)
+                        .content(stringRequest)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.youtubeUrl").value("YouTube URL은 필수 입력 사항입니다."))
+                .andDo(print());
+
+    }
+
+    @DisplayName("게시글 등록 요청시 YouTube URL 형식이 올바르지 않으면 예외가 발생한다.")
+    @Test
+    void register_invalid_youtubeUrl_format() throws Exception {
+
+        // given
+        EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
+                .title("The Glee, season2 ep.3")
+                .content("the series ...@#!#")
+                .youtubeUrl("invalid_url")  // 잘못된 형식의 URL
+                .build();
+
+        String stringRequest = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/api/v1/english-transcript")
+                        .contentType(APPLICATION_JSON)
+                        .content(stringRequest)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.youtubeUrl").value("유효한 YouTube URL을 입력해주세요."))
+                .andDo(print());
+
+    }
+
 
     @DisplayName("/api/v1/english-transcript에 POST 요청 이후 해당 게시글이 DB를 통해 정상적으로 조회된다.")
     @Test
@@ -84,13 +138,14 @@ class EnglishTranscriptControllerTest {
 
         // given
         String uuidTitle = "Glee season1 (ep1) - " + UUID.randomUUID();
+        String validYoutubeUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
         EnglishTranscriptCreate request = EnglishTranscriptCreate.builder()
                 .title(uuidTitle)
                 .content("the series ...@#!#")
+                .youtubeUrl(validYoutubeUrl)
                 .build();
 
         String stringRequest = objectMapper.writeValueAsString(request);
-
 
         // when
         mockMvc.perform(post("/api/v1/english-transcript")
@@ -107,6 +162,7 @@ class EnglishTranscriptControllerTest {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value(uuidTitle))
+                .andExpect(jsonPath("$[0].youtubeUrl").value(validYoutubeUrl))
                 .andDo(print());
     }
 
