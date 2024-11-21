@@ -2,7 +2,7 @@ TRUNCATE TABLE english_transcript;
 
 SET SESSION cte_max_recursion_depth = 1000000;
 
-INSERT INTO english_transcript (title, content, created_at)
+INSERT INTO english_transcript (title, content, youtube_url, created_at)
 WITH RECURSIVE cte (n) AS
                    (
                        SELECT 1
@@ -45,6 +45,8 @@ SELECT
             '실전 예제로는, "Can I get a glass of water?"와 같은 간단한 문장을 사용하는 방법을 다룹니다. ',
             '지금부터 영어 실력을 향상시키기 위한 다양한 전략을 살펴보겠습니다. 예제 번호: ', CAST(n AS CHAR)
         ) AS content,
+
+    'https://www.youtube.com/watch?v=a57hvjknIcQ' AS youtube_url,
 
     TIMESTAMP(DATE_ADD(NOW(), INTERVAL -FLOOR(RAND(n) * 1825) DAY) + INTERVAL FLOOR(RAND(n) * 86400) SECOND) AS created_at
 FROM cte;
