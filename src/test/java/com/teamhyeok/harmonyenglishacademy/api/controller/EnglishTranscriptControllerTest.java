@@ -163,6 +163,7 @@ class EnglishTranscriptControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value(uuidTitle))
                 .andExpect(jsonPath("$[0].youtubeUrl").value(validYoutubeUrl))
+                .andExpect(jsonPath("$[0].createdAt").exists())
                 .andDo(print());
     }
 
