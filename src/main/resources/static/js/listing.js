@@ -28,7 +28,9 @@ function renderTranscriptList(transcriptList) {
         const formattedDate = new Date(createdAt).toLocaleDateString();
 
         const videoId = extractVideoId(youtubeUrl);
-        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        const thumbnailUrl = videoId
+            ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+            : '/images/announce/noYoutubeVideo.png';
 
         const htmlData = `
         <div class="col">
