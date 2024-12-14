@@ -5,6 +5,7 @@ import com.teamhyeok.harmonyenglishacademy.api.request.EnglishTranscriptCreate;
 import com.teamhyeok.harmonyenglishacademy.api.service.EnglishTranscriptService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/v1/english-transcript")
-@RequiredArgsConstructor @RestController
+@RequiredArgsConstructor
+@RestController
 public class EnglishTranscriptController {
 
     private final EnglishTranscriptService englishTranscriptService;
+
     @PostMapping
     public ResponseEntity<Map<String, String>> register(
             @RequestBody @Valid EnglishTranscriptCreate request
@@ -28,13 +31,12 @@ public class EnglishTranscriptController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EnglishTranscript>> getEnglishTranscript(
+    public ResponseEntity<Page<EnglishTranscript>> getEnglishTranscript(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<EnglishTranscript> transcript = englishTranscriptService.getEnglishTranscript(page, size);
-        return ResponseEntity.ok(transcript);
-
+        Page<EnglishTranscript> transcriptPage = englishTranscriptService.getEnglishTranscript(page, size);
+        return ResponseEntity.ok(transcriptPage);
     }
 
     @GetMapping("/search")

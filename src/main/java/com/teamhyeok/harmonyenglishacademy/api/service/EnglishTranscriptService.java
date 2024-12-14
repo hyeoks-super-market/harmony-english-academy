@@ -3,6 +3,7 @@ package com.teamhyeok.harmonyenglishacademy.api.service;
 import com.teamhyeok.harmonyenglishacademy.api.domain.EnglishTranscript;
 import com.teamhyeok.harmonyenglishacademy.api.repository.EnglishTranscriptRepository;
 import com.teamhyeok.harmonyenglishacademy.api.request.EnglishTranscriptCreate;
+import com.teamhyeok.harmonyenglishacademy.api.response.EnglishTranscriptPageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -10,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@RequiredArgsConstructor @Service @Slf4j
+@RequiredArgsConstructor
+@Service
+@Slf4j
 public class EnglishTranscriptService {
     private final EnglishTranscriptRepository englishTranscriptRepository;
 
@@ -32,24 +36,27 @@ public class EnglishTranscriptService {
 
     }
 
-    public List<EnglishTranscript> searchTranscriptByTitle(String title, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<EnglishTranscript> pageOfEnglishTranscript = englishTranscriptRepository.findByTitleContainingIgnoreCase(title, pageable);
-        return pageOfEnglishTranscript.getContent();
-    }
-
     @Cacheable(cacheNames = "getEnglishTranscript", key = "'englishTranscript:page:' + #page + ':size:' + #size", cacheManager = "englishTranscriptCacheManager")
-    public List<EnglishTranscript> getEnglishTranscript(int page, int size) {
-
+    public EnglishTranscriptPageDto getEnglishTranscriptDto(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<EnglishTranscript> pageOfEnglishTranscript = englishTranscriptRepository.findAllByOrderByCreatedAtDesc(pageable);
-
-        return pageOfEnglishTranscript.getContent();
-
+        Page<EnglishTranscript> pageData = englishTranscriptRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return new EnglishTranscriptPageDto(
+                pageData.getContent(),
+                pageData.getNumber(),
+                pageData.getSize(),
+                pageData.getTotalElements()
+        );
     }
+
+    public Page<EnglishTranscript> getEnglishTranscript(int page, int size) {
+        EnglishTranscriptPageDto dto = getEnglishTranscriptDto(page, size);
+        Pageable pageable = PageRequest.of(dto.getPageNumber(), dto.getPageSize());
+        return new PageImpl<>(dto.getContent(), pageable, dto.getTotalElements());
+    }
+
 
     private void validateYouTubeVideo(String youtubeUrl) {
-        String apiKey = System.getenv("YOUTUBE_API_KEY");
+        String apiKey = "AIzaSyCgiSqHJlL1EPzL3_UBuJoOAU5MwOogkdE";
         String videoId = extractVideoId(youtubeUrl);
 
         String apiUrl = "https://www.googleapis.com/youtube/v3/videos?id=" + videoId + "&key=" + apiKey + "&part=id";
@@ -79,5 +86,12 @@ public class EnglishTranscriptService {
             throw new IllegalArgumentException("유효한 YouTube URL이 아닙니다.");
         }
     }
+
+    public List<EnglishTranscript> searchTranscriptByTitle(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<EnglishTranscript> pageOfEnglishTranscript = englishTranscriptRepository.findByTitleContainingIgnoreCase(title, pageable);
+        return pageOfEnglishTranscript.getContent();
+    }
+
 }
 
