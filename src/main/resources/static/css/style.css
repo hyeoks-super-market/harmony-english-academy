@@ -157,3 +157,36 @@ a:active {
 .article-date {
     color: #6c757d;
 }
+
+
+/* 네이버 보고 따라해본 페이지네이션 스타일 */
+.pagination-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-bar .page-link {
+    color: #333;
+    background-color: #fff;
+    border-color: #ddd;
+    margin: 0 2px;
+    padding: 6px 12px;
+    text-decoration: none;
+}
+
+.pagination-bar .page-link:hover {
+    background-color: #f5f5f5;
+}
+
+.pagination-bar .page-item.active .page-link {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.pagination-bar .page-item.disabled .page-link {
+    color: #999;
+    pointer-events: none;
+    cursor: default;
+}
