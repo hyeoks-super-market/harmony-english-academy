@@ -4,33 +4,36 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <!-- Open graph -->
-    <meta property="og:title" content="할머니의 따뜻한 사랑" />
-    <meta property="og:description" content="어여와 ..." />
-    <meta property="og:image" content="https://cdn.cashfeed.co.kr/attachments/d2befda8fc.jpg" />
-    <meta property="og:url" content="-" />
-    <meta property="og:site_name" content="할머니네 슈퍼마켓" />
+    <meta property="og:title" content="할머니의 따뜻한 사랑"/>
+    <meta property="og:description" content="어여와 ..."/>
+    <meta property="og:image" content="https://cdn.cashfeed.co.kr/attachments/d2befda8fc.jpg"/>
+    <meta property="og:url" content="-"/>
+    <meta property="og:site_name" content="할머니네 슈퍼마켓"/>
     <title>할머니네 슈퍼마켓</title>
 
     <!-- link 모음 -->
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <!-- BootStrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/style.css"/>
 
     <!-- script 모음 -->
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-    <!-- listing.js 파일을 포함 -->
+    <!-- 게시글 조회 및 페이지 인덱스 번호를 그려주기 위한 js 임포트 -->
     <script defer src="/js/listing.js"></script>
+    <script defer src="/js/pagination.js"></script>
     <!-- Font Awesome CSS -->
     <script src="https://kit.fontawesome.com/f6788aacd4.js" crossorigin="anonymous"></script>
     <!-- BootStrap -->
@@ -41,30 +44,33 @@
 </head>
 
 <body class="has-navbar-fixed-top">
-    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="index.html">
-                <small class="navbar_team">TEAM.</small>
-                <div class="navbar_text">harmony</div>
-            </a>
-        </div>
-        <div class="navbar_icon">
-        </div>
-    </nav>
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+            <small class="navbar_team">TEAM.</small>
+            <div class="navbar_text">harmony</div>
+        </a>
+    </div>
+    <div class="navbar_icon">
+    </div>
+</nav>
 
-    <div class="academy_title">
-        <div id="weather_container"></div>
-        <div class="title_content">
-            <h1>할머니네 영어핵원</h1>
-            <h5 class="grand-mothers-love">우리 똥강아지~ 영어가 배우고 싶은겨 ~? <br> 영어 핵원? 할미랑 공부허면 되니께 준비혀 - <br><br> 할미도 미군한테 다 배웠으니께 걱정 말어 ~ 🐶</h5>
-            <button><a href="https://blog.naver.com/cksgurwkd12/223569914654" target="_blank"> 아가 기죽지마!!</a></button>
-            <button><a href="https://blog.naver.com/cksgurwkd12" target="_blank"> Team about</a></button>
-        </div>
+<div class="academy_title">
+    <div id="weather_container"></div>
+    <div class="title_content">
+        <h1>할머니네 영어핵원</h1>
+        <h5 class="grand-mothers-love">우리 똥강아지~ 영어가 배우고 싶은겨 ~? <br> 영어 핵원? 할미랑 공부허면 되니께 준비혀 - <br><br> 할미도 미군한테 다 배웠으니께
+            걱정 말어 ~ 🐶</h5>
+        <button><a href="https://blog.naver.com/cksgurwkd12/223569914654" target="_blank"> 아가 기죽지마!!</a></button>
+        <button><a href="https://blog.naver.com/cksgurwkd12" target="_blank"> Team about</a></button>
     </div>
-    <div class="article-list">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="articles-box">
-            <!-- listing.js에 의해 동적으로 콘텐츠가 추가 -->
-        </div>
+</div>
+<div class="article-list">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="articles-box">
+        <!-- listing.js에 의해 동적으로 콘텐츠가 추가 -->
     </div>
+</div>
+<!-- 페이지네이션 추가 -->
+<div id="pagination-container" class="pagination-bar"></div>
 </body>
 </html>
