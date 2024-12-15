@@ -51,8 +51,9 @@
     }
 
     function renderPagination(response) {
-        const {number, totalPages} = response;
-        const currentPage = number + 1;
+        const {pageNumber, pageSize, totalElements} = response;
+        const currentPage = pageNumber + 1;
+        const totalPages = Math.ceil(totalElements / pageSize);
         const $paginationContainer = $('#pagination-container');
 
         $paginationContainer.empty();
