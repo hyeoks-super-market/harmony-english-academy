@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -40,20 +39,14 @@ public class EnglishTranscriptService {
     public EnglishTranscriptPageDto getEnglishTranscriptDto(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<EnglishTranscript> pageData = englishTranscriptRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return new EnglishTranscriptPageDto(
-                pageData.getContent(),
-                pageData.getNumber(),
-                pageData.getSize(),
-                pageData.getTotalElements()
-        );
+        return EnglishTranscriptPageDto.fromPage(pageData);
     }
 
-    public Page<EnglishTranscript> getEnglishTranscript(int page, int size) {
-        EnglishTranscriptPageDto dto = getEnglishTranscriptDto(page, size);
-        Pageable pageable = PageRequest.of(dto.getPageNumber(), dto.getPageSize());
-        return new PageImpl<>(dto.getContent(), pageable, dto.getTotalElements());
+    public List<EnglishTranscript> searchTranscriptByTitle(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<EnglishTranscript> pageOfEnglishTranscript = englishTranscriptRepository.findByTitleContainingIgnoreCase(title, pageable);
+        return pageOfEnglishTranscript.getContent();
     }
-
 
     private void validateYouTubeVideo(String youtubeUrl) {
         String apiKey = "AIzaSyCgiSqHJlL1EPzL3_UBuJoOAU5MwOogkdE";
@@ -87,11 +80,6 @@ public class EnglishTranscriptService {
         }
     }
 
-    public List<EnglishTranscript> searchTranscriptByTitle(String title, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<EnglishTranscript> pageOfEnglishTranscript = englishTranscriptRepository.findByTitleContainingIgnoreCase(title, pageable);
-        return pageOfEnglishTranscript.getContent();
-    }
 
 }
 
