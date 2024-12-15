@@ -2,6 +2,7 @@ package com.teamhyeok.harmonyenglishacademy.api.controller;
 
 import com.teamhyeok.harmonyenglishacademy.api.domain.EnglishTranscript;
 import com.teamhyeok.harmonyenglishacademy.api.request.EnglishTranscriptCreate;
+import com.teamhyeok.harmonyenglishacademy.api.response.EnglishTranscriptPageDto;
 import com.teamhyeok.harmonyenglishacademy.api.service.EnglishTranscriptService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/v1/english-transcript")
-@RequiredArgsConstructor
-@RestController
+@RequiredArgsConstructor @RestController
 public class EnglishTranscriptController {
 
     private final EnglishTranscriptService englishTranscriptService;
-
     @PostMapping
     public ResponseEntity<Map<String, String>> register(
             @RequestBody @Valid EnglishTranscriptCreate request
@@ -31,12 +30,12 @@ public class EnglishTranscriptController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<EnglishTranscript>> getEnglishTranscript(
+    public ResponseEntity<EnglishTranscriptPageDto> getEnglishTranscript(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        Page<EnglishTranscript> transcriptPage = englishTranscriptService.getEnglishTranscript(page, size);
-        return ResponseEntity.ok(transcriptPage);
+        EnglishTranscriptPageDto englishTranscriptPageDto = englishTranscriptService.getEnglishTranscriptDto(page, size);
+        return ResponseEntity.ok(englishTranscriptPageDto);
     }
 
     @GetMapping("/search")
